@@ -94,24 +94,20 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
     @Override
     public synchronized InputStream getInputStream() throws IOException
     {
-        // Catch IOException to log the content of the error stream
-        try
+        if (this.streamBuffer == null)
         {
-            if (this.streamBuffer == null)
-            {
+            // Catch IOException to log the content of the error stream
                 LOGGER.debug("Original connection = " + this.delegate);
-
-                InputStream is = this.delegate.getInputStream();
-
+            try(InputStream is = this.delegate.getInputStream())
+            {
                 this.streamBuffer = getBufferedInputStream(is);
             }
+            catch (IOException e)
+            {
+                logErrorStream(this.delegate.getErrorStream());
+                throw e;
+            }
         }
-        catch (IOException e)
-        {
-            logErrorStream(this.delegate.getErrorStream());
-            throw e;
-        }
-
         return this.streamBuffer;
     }
 
@@ -127,13 +123,15 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
         if (theErrorStream != null)
         {
             // Log content of error stream
-            BufferedReader errorStream = 
-                new BufferedReader(new InputStreamReader(theErrorStream));
-            String buffer;
-
-            while ((buffer = errorStream.readLine()) != null)
+            try(BufferedReader errorStream =
+                        new BufferedReader(new InputStreamReader(theErrorStream)))
             {
-                LOGGER.debug("ErrorStream [" + buffer + "]");
+                String buffer;
+
+                while ((buffer = errorStream.readLine()) != null)
+                {
+                    LOGGER.debug("ErrorStream [" + buffer + "]");
+                }
             }
         }
     }
@@ -149,14 +147,13 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
     private InputStream getBufferedInputStream(InputStream theInputStream)
         throws IOException
     {
-        ByteArrayOutputStream os = 
-            new ByteArrayOutputStream(DEFAULT_CHUNK_SIZE);
+        try(ByteArrayOutputStream os =
+                    new ByteArrayOutputStream(DEFAULT_CHUNK_SIZE))
+        {
+            copy(theInputStream, os);
 
-        copy(theInputStream, os);
-
-        ByteArrayInputStream bais = new ByteArrayInputStream(os.toByteArray());
-
-        return bais;
+            return new ByteArrayInputStream(os.toByteArray());
+        }
     }
 
     /**

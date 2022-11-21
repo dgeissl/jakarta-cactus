@@ -108,7 +108,13 @@ public class HttpProtocolHandler implements ProtocolHandler
         
         // Close the input stream (just in the case the user has not done it
         // in it's endXXX method (or if it has no endXXX method) ....
-        state.getConnection().getInputStream().close();       
+        try
+        {
+            state.getConnection().getInputStream().close();
+        } finally
+        {
+            state.getConnection().disconnect();
+        }
     }
 
     // Private methods ----------------------------------------------------
