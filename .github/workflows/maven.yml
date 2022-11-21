@@ -29,5 +29,6 @@ jobs:
         java-version: 7
     - name: Build and test with Maven
       run: |
+        chmod +x mvnw
         ./mvnw -B install --file pom.xml
         ./mvnw -B assembly:single --file cactus-assembly/pom.xml

@@ -73,7 +73,7 @@
         <maven.compile.source>1.7</maven.compile.source>
         <maven.compile.target>1.7</maven.compile.target>
         <!-- library versions -->
-        <aspectj.version>1.9.7</aspectj.version>
+        <aspectj.version>1.7.4</aspectj.version>
     </properties>
 
     <modules>
@@ -260,7 +260,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>aspectj-maven-plugin</artifactId>
-                    <version>1.11</version>
+                    <version>1.10</version>
                     <configuration>
                         <complianceLevel>${maven.compile.target}</complianceLevel>
                         <source>${maven.compile.source}</source>

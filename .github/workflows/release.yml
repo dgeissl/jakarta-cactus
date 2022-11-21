@@ -21,8 +21,9 @@ jobs:
           NEW_VERSION=$(echo "${GITHUB_REF}" | sed -r 's/.*\/v//')
           echo "New version: ${NEW_VERSION}"
           echo "Github username: ${GITHUB_ACTOR}"
-          mvn -B versions:set -DnewVersion=${NEW_VERSION}
-          mvn -B versions:commit
-          mvn -B install --file pom.xml
-          mvn -B assembly:single --file cactus-assembly/pom.xml
-          mvn -B deploy --file pom.xml
+          chmod +x mvnw
+          ./mvnw -B versions:set -DnewVersion=${NEW_VERSION}
+          ./mvnw -B versions:commit
+          ./mvnw -B install --file pom.xml
+          ./mvnw -B assembly:single --file cactus-assembly/pom.xml
+          ./mvnw -B deploy --file pom.xml
