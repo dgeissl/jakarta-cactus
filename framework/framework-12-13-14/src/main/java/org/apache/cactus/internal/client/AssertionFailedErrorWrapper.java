@@ -22,9 +22,6 @@ package org.apache.cactus.internal.client;
 
 import junit.framework.AssertionFailedError;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-
 /**
  * Same as <code>ServletExceptionWrapper</code> except that this exception class
  * extends JUnit <code>AssertionFailedError</code> so that JUnit will
