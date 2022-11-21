@@ -35,6 +35,23 @@
         <!-- ================================================================= -->
         <!-- Release changes -->
         <!-- ================================================================= -->
+        <release version="1.8.4" date="2020" description="Stacktrace in Gradle">
+            <action dev="geissld" type="fix">
+                Rewrite some of the client code to improve resource handling.
+                <fixes issue="issues/41" />
+
+            </action>
+            <action dev="geissld" type="update">
+                Update source and target version to 1.7, to be able to use generics.
+            </action>
+            <action dev="geissld" type="update">
+                Update build environment to java 7 and github actions instead of travis-ci.
+            </action>
+            <action dev="geissld" type="remove">
+                Drop eclipse integration. The eclipse plugin was outdated and was not buildable
+                anymore, that's why all code and documentation was deleted.
+            </action>
+        </release>
         <release version="1.8.3" date="2020" description="Stacktrace in Gradle">
             <action dev="geissld" type="fix">
                 Restoring the serverside stacktrace in StackTraceElements and Exceptions with causes.
