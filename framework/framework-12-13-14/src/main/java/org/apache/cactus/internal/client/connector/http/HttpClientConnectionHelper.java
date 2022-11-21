@@ -58,7 +58,7 @@ public class HttpClientConnectionHelper implements ConnectionHelper
     /**
      * The URL that will be used for the HTTP connection.
      */
-    private String url;
+    private final String url;
 
     /**
      * @param theURL the URL that will be used for the HTTP connection.

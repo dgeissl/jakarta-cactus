@@ -90,7 +90,7 @@ public class ClientTestCaseCaller extends Assert
     /**
      * The protocol handler to use to execute the tests on the server side.
      */
-    private ProtocolHandler protocolHandler;
+    private final ProtocolHandler protocolHandler;
 
     // Constructors ---------------------------------------------------------
     

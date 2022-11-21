@@ -95,12 +95,12 @@ public interface WebRequest extends Request
      * @return the parameter names that will be passed in the request body
      *         (POST)
      */
-    Enumeration getParameterNamesPost();
+    Enumeration<String> getParameterNamesPost();
 
     /**
      * @return the parameter names that will be passed in the URL (GET)
      */
-    Enumeration getParameterNamesGet();
+    Enumeration<String> getParameterNamesGet();
 
     /**
      * Returns the first value corresponding to this parameter's name (provided
@@ -184,7 +184,7 @@ public interface WebRequest extends Request
     /**
      * @return the cookies (vector of <code>Cookie</code> objects)
      */
-    Vector getCookies();
+    Vector<Cookie> getCookies();
 
     /**
      * Adds a header to the request. Supports adding several values for the
@@ -198,7 +198,7 @@ public interface WebRequest extends Request
     /**
      * @return the header names
      */
-    Enumeration getHeaderNames();
+    Enumeration<String> getHeaderNames();
 
     /**
      * Returns the first value corresponding to this header's name.

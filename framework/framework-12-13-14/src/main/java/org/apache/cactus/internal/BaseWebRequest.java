@@ -58,7 +58,7 @@ public abstract class BaseWebRequest implements WebRequest
     /**
      * The Cookies.
      */
-    private Vector cookies = new Vector();
+    private Vector<Cookie> cookies = new Vector<>();
 
     /**
      * HTTP Headers.
@@ -347,7 +347,7 @@ public abstract class BaseWebRequest implements WebRequest
      * {@inheritDoc}
      * @see WebRequest#getCookies()
      */
-    public Vector getCookies()
+    public Vector<Cookie> getCookies()
     {
         return this.cookies;
     }

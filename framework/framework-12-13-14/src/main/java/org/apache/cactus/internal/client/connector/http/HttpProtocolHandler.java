@@ -48,7 +48,7 @@ public class HttpProtocolHandler implements ProtocolHandler
      * Cactus configuration data to use. In particular contains useful 
      * configuration data for the HTTP connector (e.g. redirector URL).
      */
-    private WebConfiguration configuration;
+    private final WebConfiguration configuration;
 
     /**
      * @param theConfiguration configuration data

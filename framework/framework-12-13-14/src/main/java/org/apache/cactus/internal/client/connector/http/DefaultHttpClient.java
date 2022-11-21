@@ -168,7 +168,7 @@ public class DefaultHttpClient
         // before we ask for results
         connection = new AutoReadHttpURLConnection(connection);
 
-        // Trigger the transfer of data
+        // Trigger the transfer and buffering of data
         connection.getInputStream();
 
         return connection;
@@ -180,7 +180,7 @@ public class DefaultHttpClient
      * @param theOriginalRequest the request that was used to run the test
      * @return the result that was returned by the redirector.
      *
-     * @exception Throwable if an error occured in the test method or in the
+     * @exception Throwable if an error occurred in the test method or in the
      *            redirector servlet.
      */
     private WebTestResult callGetResult(WebRequest theOriginalRequest) 

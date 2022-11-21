@@ -65,7 +65,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
     /**
      * The wrapped connection.
      */
-    private HttpURLConnection delegate;
+    private final HttpURLConnection delegate;
 
     /**
      * The read input stream.
@@ -91,6 +91,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * @return the input stream
      * @exception IOException if an error occurs when reading the input stream
      */
+    @Override
     public synchronized InputStream getInputStream() throws IOException
     {
         // Catch IOException to log the content of the error stream
@@ -203,7 +204,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
     {
         // Log portion of read data and replace asc 10 by \r and asc
         // 13 by /n
-        StringBuffer prefix = new StringBuffer();
+        StringBuilder prefix = new StringBuilder();
 
         for (int i = 0; i < theCount; i++)
         {
@@ -239,6 +240,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getAllowUserInteraction()
      */
+    @Override
     public boolean getAllowUserInteraction()
     {
         return this.delegate.getAllowUserInteraction();
@@ -248,6 +250,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getContent()
      */
+    @Override
     public Object getContent() throws IOException
     {
         return this.delegate.getContent();
@@ -257,6 +260,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getContentEncoding()
      */
+    @Override
     public String getContentEncoding()
     {
         return this.delegate.getContentEncoding();
@@ -266,6 +270,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getContentLength()
      */
+    @Override
     public int getContentLength()
     {
         return this.delegate.getContentLength();
@@ -275,6 +280,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getContentType()
      */
+    @Override
     public String getContentType()
     {
         return this.delegate.getContentType();
@@ -284,6 +290,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getDate()
      */
+    @Override
     public long getDate()
     {
         return this.delegate.getDate();
@@ -293,6 +300,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getDefaultUseCaches()
      */
+    @Override
     public boolean getDefaultUseCaches()
     {
         return this.delegate.getDefaultUseCaches();
@@ -302,6 +310,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getDoInput()
      */
+    @Override
     public boolean getDoInput()
     {
         return this.delegate.getDoInput();
@@ -310,6 +319,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
     /**{@inheritDoc}
      * @see java.net.HttpURLConnection#getDoOutput()
      */
+    @Override
     public boolean getDoOutput()
     {
         return this.delegate.getDoOutput();
@@ -319,6 +329,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getExpiration()
      */
+    @Override
     public long getExpiration()
     {
         return this.delegate.getExpiration();
@@ -328,6 +339,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getHeaderField(int)
      */
+    @Override
     public String getHeaderField(int thePosition)
     {
         return this.delegate.getHeaderField(thePosition);
@@ -337,6 +349,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getHeaderField(String)
      */
+    @Override
     public String getHeaderField(String theName)
     {
         return this.delegate.getHeaderField(theName);
@@ -346,6 +359,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getHeaderFieldDate(String, long)
      */
+    @Override
     public long getHeaderFieldDate(String theName, long theDefaultValue)
     {
         return this.delegate.getHeaderFieldDate(theName, theDefaultValue);
@@ -355,6 +369,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getHeaderFieldInt(String, int)
      */
+    @Override
     public int getHeaderFieldInt(String theName, int theDefaultValue)
     {
         return this.delegate.getHeaderFieldInt(theName, theDefaultValue);
@@ -364,6 +379,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getHeaderFieldKey(int)
      */
+    @Override
     public String getHeaderFieldKey(int thePosition)
     {
         return this.delegate.getHeaderFieldKey(thePosition);
@@ -373,6 +389,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getIfModifiedSince()
      */
+    @Override
     public long getIfModifiedSince()
     {
         return this.delegate.getIfModifiedSince();
@@ -382,6 +399,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getLastModified()
      */
+    @Override
     public long getLastModified()
     {
         return this.delegate.getLastModified();
@@ -391,6 +409,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getOutputStream()
      */
+    @Override
     public OutputStream getOutputStream() throws IOException
     {
         return this.delegate.getOutputStream();
@@ -400,6 +419,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getPermission()
      */
+    @Override
     public Permission getPermission() throws IOException
     {
         return this.delegate.getPermission();
@@ -409,6 +429,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getRequestProperty(String)
      */
+    @Override
     public String getRequestProperty(String theKey)
     {
         return this.delegate.getRequestProperty(theKey);
@@ -418,6 +439,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getURL()
      */
+    @Override
     public URL getURL()
     {
         return this.delegate.getURL();
@@ -427,6 +449,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getUseCaches()
      */
+    @Override
     public boolean getUseCaches()
     {
         return this.delegate.getUseCaches();
@@ -436,6 +459,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setAllowUserInteraction(boolean)
      */
+    @Override
     public void setAllowUserInteraction(boolean hasInteraction)
     {
         this.delegate.setAllowUserInteraction(hasInteraction);
@@ -445,6 +469,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setDefaultUseCaches(boolean)
      */
+    @Override
     public void setDefaultUseCaches(boolean isUsingDefaultCache)
     {
         this.delegate.setDefaultUseCaches(isUsingDefaultCache);
@@ -454,6 +479,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setDoInput(boolean)
      */
+    @Override
     public void setDoInput(boolean isInput)
     {
         this.delegate.setDoInput(isInput);
@@ -463,6 +489,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setDoOutput(boolean)
      */
+    @Override
     public void setDoOutput(boolean isOutput)
     {
         this.delegate.setDoOutput(isOutput);
@@ -472,6 +499,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setIfModifiedSince(long)
      */
+    @Override
     public void setIfModifiedSince(long isModifiedSince)
     {
         this.delegate.setIfModifiedSince(isModifiedSince);
@@ -481,6 +509,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setRequestProperty(String, String)
      */
+    @Override
     public void setRequestProperty(String theKey, String theValue)
     {
         this.delegate.setRequestProperty(theKey, theValue);
@@ -490,6 +519,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setUseCaches(boolean)
      */
+    @Override
     public void setUseCaches(boolean isUsingCaches)
     {
         this.delegate.setUseCaches(isUsingCaches);
@@ -499,6 +529,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#toString()
      */
+    @Override
     public String toString()
     {
         return this.delegate.toString();
@@ -517,6 +548,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getErrorStream()
      */
+    @Override
     public InputStream getErrorStream()
     {
         return this.delegate.getErrorStream();
@@ -526,6 +558,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getRequestMethod()
      */
+    @Override
     public String getRequestMethod()
     {
         return this.delegate.getRequestMethod();
@@ -535,6 +568,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getResponseCode()
      */
+    @Override
     public int getResponseCode() throws IOException
     {
         return this.delegate.getResponseCode();
@@ -544,6 +578,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#getResponseMessage()
      */
+    @Override
     public String getResponseMessage() throws IOException
     {
         return this.delegate.getResponseMessage();
@@ -553,6 +588,7 @@ final class AutoReadHttpURLConnection extends HttpURLConnection
      * {@inheritDoc}
      * @see java.net.HttpURLConnection#setRequestMethod(String)
      */
+    @Override
     public void setRequestMethod(String theMethod) throws ProtocolException
     {
         this.delegate.setRequestMethod(theMethod);
