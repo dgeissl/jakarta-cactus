@@ -48,7 +48,7 @@ public class HttpProtocolHandler implements ProtocolHandler
      * Cactus configuration data to use. In particular contains useful 
      * configuration data for the HTTP connector (e.g. redirector URL).
      */
-    private WebConfiguration configuration;
+    private final WebConfiguration configuration;
 
     /**
      * @param theConfiguration configuration data
@@ -108,7 +108,13 @@ public class HttpProtocolHandler implements ProtocolHandler
         
         // Close the input stream (just in the case the user has not done it
         // in it's endXXX method (or if it has no endXXX method) ....
-        state.getConnection().getInputStream().close();       
+        try
+        {
+            state.getConnection().getInputStream().close();
+        } finally
+        {
+            state.getConnection().disconnect();
+        }
     }
 
     // Private methods ----------------------------------------------------

@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 /**
  * Various utility methods for manipulating IO streams.
@@ -53,28 +54,22 @@ public class IoUtil
     public static String getText(InputStream theStream, String theCharsetName) 
         throws IOException
     {
-        StringBuffer sb = new StringBuffer();
-
-        BufferedReader input;
-        if (theCharsetName == null)
-        {
-            input = new BufferedReader(new InputStreamReader(theStream));
-        }
-        else
-        {
-            input = new BufferedReader(
-               new InputStreamReader(theStream, theCharsetName));
-        }
-        
-        char[] buffer = new char[2048];
-        int nb;
-
-        while (-1 != (nb = input.read(buffer, 0, 2048)))
-        {
-            sb.append(buffer, 0, nb);
+        StringBuilder sb = new StringBuilder();
+        if (theCharsetName == null) {
+            theCharsetName = Charset.defaultCharset().name();
         }
 
-        input.close();
+        try (BufferedReader input = new BufferedReader(
+                new InputStreamReader(theStream, theCharsetName)) ){
+
+            char[] buffer = new char[2048];
+            int nb;
+
+            while (-1 != (nb = input.read(buffer, 0, 2048)))
+            {
+                sb.append(buffer, 0, nb);
+            }
+        }
 
         return sb.toString();
     }

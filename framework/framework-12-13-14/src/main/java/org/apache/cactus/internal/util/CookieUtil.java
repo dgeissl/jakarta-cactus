@@ -220,7 +220,7 @@ public class CookieUtil
     public static org.apache.commons.httpclient.Cookie[] 
         createHttpClientCookies(WebRequest theRequest, URL theUrl)
     {
-        Vector cactusCookies = theRequest.getCookies();
+        Vector<Cookie> cactusCookies = theRequest.getCookies();
         
         // transform the Cactus cookies into HttpClient cookies
         org.apache.commons.httpclient.Cookie[] httpclientCookies = 
@@ -228,7 +228,7 @@ public class CookieUtil
 
         for (int i = 0; i < cactusCookies.size(); i++)
         {
-            Cookie cactusCookie = (Cookie) cactusCookies.elementAt(i);
+            Cookie cactusCookie = cactusCookies.elementAt(i);
             httpclientCookies[i] = CookieUtil.createHttpClientCookie(
                 theRequest, theUrl, cactusCookie);
         }

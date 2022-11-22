@@ -31,6 +31,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 
@@ -58,7 +59,7 @@ public class HttpClientConnectionHelper implements ConnectionHelper
     /**
      * The URL that will be used for the HTTP connection.
      */
-    private String url;
+    private final String url;
 
     /**
      * @param theURL the URL that will be used for the HTTP connection.
@@ -75,7 +76,7 @@ public class HttpClientConnectionHelper implements ConnectionHelper
     public HttpURLConnection connect(WebRequest theRequest, 
         Configuration theConfiguration) throws Throwable
     {
-        URL url = new URL(this.url);
+        URL theUrl = new URL(this.url);
 
         HttpState state = new HttpState();
 
@@ -105,15 +106,18 @@ public class HttpClientConnectionHelper implements ConnectionHelper
         }
 
         // Add the parameters that need to be passed as part of the URL
-        url = HttpUtil.addHttpGetParameters(theRequest, url);
+        theUrl = HttpUtil.addHttpGetParameters(theRequest, theUrl);
 
         this.method.setFollowRedirects(false);
-        this.method.setPath(UrlUtil.getPath(url));
-        this.method.setQueryString(UrlUtil.getQuery(url));
+        this.method.setPath(UrlUtil.getPath(theUrl));
+        this.method.setQueryString(UrlUtil.getQuery(theUrl));
 
         // Sets the content type
         this.method.setRequestHeader("Content-type", 
             theRequest.getContentType());
+        // prevent connections that stay in CLOSE_WAIT state
+        // https://www.nuxeo.com/blog/using-httpclient-properly-avoid-closewait-tcp-connections/
+        method.setRequestHeader("Connection", "close");
 
         // Add the other header fields
         addHeaders(theRequest);
@@ -131,19 +135,18 @@ public class HttpClientConnectionHelper implements ConnectionHelper
 
         // Add the cookies to the state
         state.addCookies(CookieUtil.createHttpClientCookies(theRequest, 
-            url));
+            theUrl));
 
         // Open the connection and get the result
         HttpClient client = new HttpClient();
         HostConfiguration hostConfiguration = new HostConfiguration();
-        hostConfiguration.setHost(url.getHost(), url.getPort(),
-            Protocol.getProtocol(url.getProtocol()));
+        hostConfiguration.setHost(theUrl.getHost(), theUrl.getPort(),
+            Protocol.getProtocol(theUrl.getProtocol()));
         client.setState(state);
         client.executeMethod(hostConfiguration, this.method);
 
         // Wrap the HttpClient method in a java.net.HttpURLConnection object
-        return new org.apache.commons.httpclient.util.HttpURLConnection(
-            this.method, url);
+        return new ReleasableHttpURLConnection(this.method, theUrl);
     }
     
     /**
@@ -160,20 +163,18 @@ public class HttpClientConnectionHelper implements ConnectionHelper
             return;
         }
 
-        Enumeration keys = theRequest.getParameterNamesPost();
-        List parameters = new ArrayList();
+        Enumeration<String> keys = theRequest.getParameterNamesPost();
+        List<NameValuePair> parameters = new ArrayList<>();
         while (keys.hasMoreElements())
         {
-            String key = (String) keys.nextElement();
+            String key = keys.nextElement();
             String[] values = theRequest.getParameterValuesPost(key);
-            for (int i = 0; i < values.length; i++)
-            {
-                parameters.add(new NameValuePair(key, values[i]));
+            for (String value : values) {
+                parameters.add(new NameValuePair(key, value));
             }
         }
         ((PostMethod) this.method).setRequestBody(
-            (NameValuePair[]) parameters.toArray(
-                new NameValuePair[parameters.size()]));
+            parameters.toArray(new NameValuePair[0]));
     }
 
     /**
@@ -184,18 +185,18 @@ public class HttpClientConnectionHelper implements ConnectionHelper
      */
     private void addHeaders(WebRequest theRequest)
     {
-        Enumeration keys = theRequest.getHeaderNames();
+        Enumeration<String> keys = theRequest.getHeaderNames();
 
         while (keys.hasMoreElements())
         {
-            String key = (String) keys.nextElement();
+            String key = keys.nextElement();
             String[] values = theRequest.getHeaderValues(key);
 
-            StringBuffer fullHeaderValue = new StringBuffer(values[0]);
+            StringBuilder fullHeaderValue = new StringBuilder(values[0]);
 
             for (int i = 1; i < values.length; i++)
             {
-                fullHeaderValue.append("," + values[i]);
+                fullHeaderValue.append(",").append(values[i]);
             }
 
             this.method.addRequestHeader(key, fullHeaderValue.toString());
@@ -217,6 +218,6 @@ public class HttpClientConnectionHelper implements ConnectionHelper
             return;
         }
 
-        ((PostMethod) this.method).setRequestBody(theRequest.getUserData());
+        ((PostMethod) this.method).setRequestEntity(new InputStreamRequestEntity(theRequest.getUserData()));
     }
 }

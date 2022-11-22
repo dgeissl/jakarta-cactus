@@ -35,6 +35,7 @@ import org.apache.cactus.internal.util.IoUtil;
 import org.apache.cactus.internal.util.StringUtil;
 import org.apache.cactus.util.ChainedRuntimeException;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 
 /**
@@ -168,7 +169,7 @@ public class DefaultHttpClient
         // before we ask for results
         connection = new AutoReadHttpURLConnection(connection);
 
-        // Trigger the transfer of data
+        // Trigger the transfer and buffering of data
         connection.getInputStream();
 
         return connection;
@@ -180,7 +181,7 @@ public class DefaultHttpClient
      * @param theOriginalRequest the request that was used to run the test
      * @return the result that was returned by the redirector.
      *
-     * @exception Throwable if an error occured in the test method or in the
+     * @exception Throwable if an error occurred in the test method or in the
      *            redirector servlet.
      */
     private WebTestResult callGetResult(WebRequest theOriginalRequest) 
@@ -206,19 +207,32 @@ public class DefaultHttpClient
             new HttpClientConnectionHelper(
                 this.configuration.getRedirectorURL(resultsRequest));
 
-        HttpURLConnection resultConnection = 
-            helper.connect(resultsRequest, this.configuration);
-
-        if (resultConnection.getResponseCode() != 200)
+        HttpURLConnection resultConnection = null;
+        try
         {
-            throw new ParsingException("Not a valid response ["
-                + resultConnection.getResponseCode() + " "
-                + resultConnection.getResponseMessage() + "]");
-        }
+            resultConnection =
+                    helper.connect(resultsRequest, this.configuration);
 
-        // Read the test result
-        WebTestResultParser parser = new WebTestResultParser();
-        return parser.parse(
-            IoUtil.getText(resultConnection.getInputStream(), "UTF-8"));
+            if (resultConnection.getResponseCode() != 200)
+            {
+                throw new ParsingException("Not a valid response ["
+                        + resultConnection.getResponseCode() + " "
+                        + resultConnection.getResponseMessage() + "]");
+            }
+
+            // Read the test result
+            WebTestResultParser parser = new WebTestResultParser();
+            try (InputStream resultStream = resultConnection.getInputStream()){
+                return parser.parse(
+                        IoUtil.getText(resultStream, "UTF-8"));
+            }
+        }
+        finally
+        {
+            if (resultConnection != null)
+            {
+                resultConnection.disconnect();
+            }
+        }
     }
 }

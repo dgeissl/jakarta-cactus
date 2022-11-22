@@ -141,14 +141,9 @@ public class WebRequestImpl extends BaseWebRequest
      */
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append("simulation URL = [" + getURL() + "], ");
-        buffer.append("automatic session = [" + getAutomaticSession() + "], ");
-
-        buffer.append(super.toString());
-        
-        return buffer.toString();
+        return "simulation URL = [" + getURL() + "], " +
+                "automatic session = [" + getAutomaticSession() + "], " +
+                super.toString();
     }
 
     /**
@@ -168,7 +163,7 @@ public class WebRequestImpl extends BaseWebRequest
             return;
         }
 
-        String nameValue = null;
+        String nameValue;
         StringTokenizer tokenizer = new StringTokenizer(theQueryString, "&");
         int breakParam = -1;
 

@@ -52,13 +52,13 @@ public class HttpUtil
             return theURL;
         }
 
-        StringBuffer queryString = new StringBuffer();
+        StringBuilder queryString = new StringBuilder();
 
-        Enumeration keys = theRequest.getParameterNamesGet();
+        Enumeration<String> keys = theRequest.getParameterNamesGet();
 
         if (keys.hasMoreElements())
         {
-            String key = (String) keys.nextElement();
+            String key = keys.nextElement();
             String[] values = theRequest.getParameterValuesGet(key);
 
             queryString.append(key);
@@ -76,7 +76,7 @@ public class HttpUtil
 
         while (keys.hasMoreElements())
         {
-            String key = (String) keys.nextElement();
+            String key = keys.nextElement();
             String[] values = theRequest.getParameterValuesGet(key);
 
             for (int i = 0; i < values.length; i++)
@@ -98,11 +98,11 @@ public class HttpUtil
 
         if (theURL.toString().indexOf("?") > 0)
         {
-            file = file + "&" + queryString.toString();
+            file = file + "&" + queryString;
         }
         else
         {
-            file = file + "?" + queryString.toString();
+            file = file + "?" + queryString;
         }
 
         return new URL(theURL.getProtocol(), theURL.getHost(), 
