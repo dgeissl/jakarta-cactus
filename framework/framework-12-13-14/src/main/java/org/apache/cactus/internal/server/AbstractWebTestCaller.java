@@ -201,6 +201,7 @@ public abstract class AbstractWebTestCaller
             Writer writer = getResponseWriter();
 
             writer.write(result.toXml());
+            writer.flush();
             writer.close();
         }
         catch (IOException e)
@@ -238,6 +239,7 @@ public abstract class AbstractWebTestCaller
         {
             Writer writer = getResponseWriter();
             writer.write(Version.VERSION);
+            writer.flush();
             writer.close();
         }
         catch (IOException e)
@@ -266,6 +268,7 @@ public abstract class AbstractWebTestCaller
         try
         {
             Writer writer = getResponseWriter();
+            writer.flush();
             writer.close();
         }
         catch (IOException e)
