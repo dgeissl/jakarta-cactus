@@ -23,7 +23,7 @@
     <parent>
         <groupId>io.github.dgeissl.cactus</groupId>
         <artifactId>cactus.integration</artifactId>
-        <version>1.8.4-SNAPSHOT</version>
+        <version>1.8.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>cactus.integration.shared.api</artifactId>
